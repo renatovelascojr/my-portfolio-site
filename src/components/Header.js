@@ -20,7 +20,7 @@ const socials = [
   },
   {
     icon: faGithub,
-    url: "https://github.com",
+    url: "https://github.com/renatovelascojr",
   },
   {
     icon: faLinkedin,

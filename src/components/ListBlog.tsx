@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient.ts";
+import CreateBlog from "./CreateBlog.tsx";
+import UpdateBlog from "./UpdateBlog.tsx";
 import {
   Box,
   Button,
@@ -10,8 +12,17 @@ import {
   Spacer,
   StackDivider,
   Spinner,
+  Input,
+  Textarea,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalCloseButton,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
 
 interface Blog {
   id: number;
@@ -19,6 +30,7 @@ interface Blog {
   content: string;
   created_at: string;
   author_name: string;
+  author_id: string;
 }
 
 const BlogsList = () => {
@@ -26,6 +38,36 @@ const BlogsList = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
+  const [formData, setFormData] = useState({ title: "", content: "" });
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const openCreateModal = () => {
+    setEditingBlog(null);
+    setFormData({ title: "", content: "" });
+    onOpen();
+  };
+
+  const openEditModal = (blog: Blog) => {
+    setEditingBlog(blog);
+    setFormData({ title: blog.title, content: blog.content });
+    onOpen();
+  };
+
+  const fetchUser = async () => {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+
+    if (error) {
+      console.error("Error fetching user:", error.message);
+    } else {
+      setUserId(user?.id || null);
+    }
+  };
 
   const fetchBlogs = async (page: number) => {
     setLoading(true);
@@ -40,13 +82,17 @@ const BlogsList = () => {
 
     if (error) {
       alert("Failed to load blogs: " + error.message);
-      setLoading(false);
-      return;
+    } else {
+      setBlogs(data || []);
     }
-
-    setBlogs(data || []);
     setLoading(false);
   };
+
+
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     fetchBlogs(page);
@@ -65,33 +111,13 @@ const BlogsList = () => {
       justify="center"
       id="blogsList-section"
     >
-      <Box
-        maxW="800px"
-        w="100%"
-        p={8}
-        bg="gray.900"
-        borderRadius="lg"
-        boxShadow="2xl"
-      >
+      <Box maxW="800px" w="100%" p={8} bg="gray.900" borderRadius="lg" boxShadow="2xl">
         <Flex mb={8} align="center">
-          <Heading
-            size="xl"
-            fontWeight="bold"
-            letterSpacing="tight"
-            color="teal.300"
-            
-          >
+          <Heading size="xl" fontWeight="bold" letterSpacing="tight" color="teal.300">
             Blog Posts
           </Heading>
           <Spacer />
-          <Button
-            as={Link}
-            to="/blogs/create"
-            colorScheme="teal"
-            size="md"
-            fontWeight="bold"
-            _hover={{ bg: "teal.400" }}
-          >
+          <Button onClick={openCreateModal} colorScheme="teal" size="md" fontWeight="bold">
             + New Blog
           </Button>
         </Flex>
@@ -105,11 +131,7 @@ const BlogsList = () => {
             No blogs found.
           </Text>
         ) : (
-          <VStack
-            spacing={6}
-            align="stretch"
-            divider={<StackDivider borderColor="gray.700" />}
-          >
+          <VStack spacing={6} align="stretch" divider={<StackDivider borderColor="gray.700" />}>
             {blogs.map((blog) => (
               <Box
                 key={blog.id}
@@ -131,15 +153,14 @@ const BlogsList = () => {
 
                 <Flex justify="flex-end" gap={2}>
                   <Button
-                    as={Link}
-                    to={`/blogs/update/${blog.id}`}
                     size="sm"
                     colorScheme="teal"
                     variant="outline"
+                    isDisabled={userId !== blog.author_id}
+                    onClick={() => openEditModal(blog)}
                   >
                     Edit
                   </Button>
-                  {/* Add Delete button here if needed */}
                 </Flex>
               </Box>
             ))}
@@ -169,6 +190,28 @@ const BlogsList = () => {
           </Button>
         </Flex>
       </Box>
+
+      {/* Modal for Create/Edit Blog */}
+     <Modal isOpen={isOpen} onClose={onClose} size="xl">
+  <ModalOverlay />
+  <ModalContent bg="gray.800" color="white">
+    <ModalHeader>{editingBlog ? "Edit Blog" : "New Blog"}</ModalHeader>
+    <ModalCloseButton />
+    <ModalBody>
+      {editingBlog ? (
+        <UpdateBlog blogId={editingBlog.id.toString()} />
+      ) : (
+        <CreateBlog
+          onSuccess={() => {
+            onClose();
+            fetchBlogs(page);
+          }}
+          onCancel={onClose}
+        />
+      )}
+    </ModalBody>
+  </ModalContent>
+</Modal>
     </Flex>
   );
 };

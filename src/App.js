@@ -17,6 +17,7 @@ import { setUser, clearUser } from './store/authSlice.ts';
 import CreateBlog from "./components/CreateBlog.tsx";
 import UpdateBlog from "./components/UpdateBlog.tsx";
 import BlogsList from "./components/ListBlog.tsx";
+import { useState } from "react";
 
 // ProtectedRoute component
 function ProtectedRoute({ children }) {
@@ -31,12 +32,21 @@ function PublicRoute({ children }) {
 }
 
 // Home component
-function Home() {
+function Home({ scrollToBlogs }) {
+  useEffect(() => {
+    if (scrollToBlogs) {
+      const blogsSection = document.getElementById("blogs-section");
+      if (blogsSection) {
+        blogsSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [scrollToBlogs]);
+
   return (
     <>
       <LandingSection />
       <ProjectsSection />
-     <BlogsList /> 
+        <BlogsList />
       <ContactMeSection />
       <Footer />
     </>
@@ -45,31 +55,37 @@ function Home() {
 
 function App() {
   const dispatch = useDispatch();
-  const location = useLocation();  // This works here because Router is higher up (in index.js)
+  const location = useLocation();
+  const [loading, setLoading] = useState(true); // new loading state
+   const user = useSelector(state => state.auth.user);  
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        dispatch(setUser(session.user));
-      } else {
-        dispatch(clearUser());
-      }
-    });
+ useEffect(() => {
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (session?.user) {
+      dispatch(setUser(session.user));
+    } else {
+      dispatch(clearUser());
+    }
+    setLoading(false);
+    console.log('Session loaded, loading set to false');
+  });
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (session?.user) {
-          dispatch(setUser(session.user));
-        } else {
-          dispatch(clearUser());
-        }
-      }
-    );
+  const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+    if (session?.user) {
+      dispatch(setUser(session.user));
+    } else {
+      dispatch(clearUser());
+    }
+  });
 
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, [dispatch]);
+  return () => {
+    authListener.subscription.unsubscribe();
+  };
+}, [dispatch]);
+
+ if (loading) {
+  return <div>Loading... (Check console for logs)</div>;
+}
 
   const noHeaderRoutes = ["/login", "/register"];
 
@@ -79,7 +95,7 @@ function App() {
         {/* NO Router HERE */}
         
         {/* Conditionally show Header */}
-        {!noHeaderRoutes.includes(location.pathname) && <Header />}
+        {!noHeaderRoutes.includes(location.pathname) && user && <Header />}
 
         <main>
           <Routes>

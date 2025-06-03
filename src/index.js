@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router>   {/* Wrap App with Router here */}
+      <Router basename="/my-portfolio-site">   {/* Wrap App with Router here */}
         <App />
       </Router>
     </Provider>
