@@ -8,10 +8,9 @@ import {
   faMedium,
   faStackOverflow,
 } from "@fortawesome/free-brands-svg-icons";
-import { Box, HStack } from "@chakra-ui/react";
+import { Box, HStack, Link as ChakraLink } from "@chakra-ui/react";
 import { supabase } from "../utils/supabaseClient.ts";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 const socials = [
   {
@@ -68,13 +67,12 @@ const Header = () => {
       }
     };
 
-    // If not on the homepage, redirect to it first
     if (location.pathname !== "/home") {
-  navigate("/home", { replace: false });
-  setTimeout(scrollToSection, 500);
-} else {
-  scrollToSection();
-}
+      navigate("/home", { replace: false });
+      setTimeout(scrollToSection, 500);
+    } else {
+      scrollToSection();
+    }
   };
 
   const handleLogout = async () => {
@@ -92,39 +90,67 @@ const Header = () => {
       top={0}
       left={0}
       right={0}
-      transform={transform}
+      transform={{ base: transform }}
       transition="transform 0.3s ease-in-out"
       backgroundColor="#18181b"
       zIndex={1000}
+      width="100%"
     >
       <Box color="white" maxWidth="1280px" margin="0 auto">
-        <HStack px={16} py={4} justifyContent="space-between" alignItems="center">
+        <HStack
+          px={{ base: 4, md: 16 }}
+          py={{ base: 3, md: 4 }}
+          justifyContent="space-between"
+          alignItems="center"
+          flexWrap="wrap"
+        >
           <nav>
-            <HStack spacing={8}>
+            <HStack spacing={{ base: 4, md: 8 }} wrap="wrap">
               {socials.map((social, index) => (
-                <a key={index} href={social.url} target="_blank" rel="noreferrer">
-                  <FontAwesomeIcon icon={social.icon} size="2x" />
-                </a>
+                <ChakraLink
+                  key={index}
+                  href={social.url}
+                  isExternal
+                  aria-label={`Link to ${social.url}`}
+                  fontSize={{ base: "lg", md: "2xl" }}
+                >
+                  <FontAwesomeIcon icon={social.icon} />
+                </ChakraLink>
               ))}
             </HStack>
           </nav>
           <nav>
-            <HStack spacing={8}>
-              <a onClick={handleScrollTo("projects")} style={{ cursor: "pointer" }}>
+            <HStack spacing={{ base: 4, md: 8 }} wrap="wrap" mt={{ base: 2, md: 0 }}>
+              <ChakraLink
+                onClick={handleScrollTo("projects")}
+                cursor="pointer"
+                fontSize={{ base: "sm", md: "md" }}
+              >
                 Projects
-              </a>
-              <a onClick={handleScrollTo("blogsList")} style={{ cursor: "pointer" }}>
+              </ChakraLink>
+              <ChakraLink
+                onClick={handleScrollTo("blogsList")}
+                cursor="pointer"
+                fontSize={{ base: "sm", md: "md" }}
+              >
                 Writing / Blogs
-              </a>
-              <a onClick={handleScrollTo("contactme")} style={{ cursor: "pointer" }}>
+              </ChakraLink>
+              <ChakraLink
+                onClick={handleScrollTo("contactme")}
+                cursor="pointer"
+                fontSize={{ base: "sm", md: "md" }}
+              >
                 Contact Us
-              </a>
-              <a
+              </ChakraLink>
+              <ChakraLink
                 onClick={handleLogout}
-                style={{ cursor: "pointer", color: "tomato", fontWeight: "bold" }}
+                cursor="pointer"
+                color="tomato"
+                fontWeight="bold"
+                fontSize={{ base: "sm", md: "md" }}
               >
                 Log Out
-              </a>
+              </ChakraLink>
             </HStack>
           </nav>
         </HStack>

@@ -38,15 +38,16 @@ const ProjectsSection = () => {
       p={8}
       alignItems="center"
       spacing={8}
-      id="projects-section"
     >
-      <Heading as="h1"  style={{marginBottom: '50px'}}>
+      <div id="projects-section" style={{ padding: '40px' }}></div>
+      <Heading as="h1" mb={12}>
         Sample Projects
       </Heading>
       <Box
         display="grid"
-        gridTemplateColumns="repeat(2,minmax(0,1fr))"
+        gridTemplateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
         gridGap={8}
+        width="100%"
       >
         {projects.map((project) => (
           <Card

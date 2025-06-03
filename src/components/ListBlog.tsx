@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient.ts";
 import CreateBlog from "./CreateBlog.tsx";
 import UpdateBlog from "./UpdateBlog.tsx";
+import FullScreenSection from "./FullScreenSection";
 import {
   Box,
   Button,
@@ -32,6 +33,25 @@ interface Blog {
   author_name: string;
   author_id: string;
 }
+
+const ExpandableText = ({ content }: { content: string }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpand = () => setIsExpanded(!isExpanded);
+
+  return (
+    <Box>
+      <Text noOfLines={isExpanded ? undefined : 3} mb={2} color="gray.300">
+        {content}
+      </Text>
+      {content.length > 150 && (
+        <Button onClick={toggleExpand} variant="link" size="sm" colorScheme="teal">
+          {isExpanded ? "Show less" : "Read more"}
+        </Button>
+      )}
+    </Box>
+  );
+};
 
 const BlogsList = () => {
   const PAGE_SIZE = 5;
@@ -99,10 +119,11 @@ const BlogsList = () => {
   }, [page]);
 
   return (
-    <Flex
+    <FullScreenSection
       direction="column"
-      minH="100vh"
-      w="100%"
+      justifyContent="center"
+        alignItems="center"
+        isDarkBackground
       background="linear-gradient(to bottom, #8B4513, #EDC9AF)"
       color="gray.700"
       px={4}
@@ -147,9 +168,7 @@ const BlogsList = () => {
                 <Text fontSize="sm" color="gray.400" mb={2}>
                   Author: {blog.author_name}
                 </Text>
-                <Text noOfLines={3} mb={4} color="gray.300">
-                  {blog.content}
-                </Text>
+                <ExpandableText content={blog.content} />
 
                 <Flex justify="flex-end" gap={2}>
                   <Button
@@ -212,7 +231,7 @@ const BlogsList = () => {
     </ModalBody>
   </ModalContent>
 </Modal>
-    </Flex>
+    </FullScreenSection>
   );
 };
 

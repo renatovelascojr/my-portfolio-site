@@ -63,65 +63,67 @@ const ContactMeSection = () => {
       background="linear-gradient(to bottom, #EDC9AF, #B66A50)"
       py={16}
       spacing={8}
+      
     >
-      <VStack w="1024px" p={32} alignItems="flex-start">
-        <Heading as="h1" id="contactme-section">
-          Contact me
-        </Heading>
-        <Box p={6} rounded="md" w="100%">
-          <form onSubmit={formik.handleSubmit}> 
-            <VStack spacing={4}>
-              <FormControl isInvalid={formik.touched.firstName && !!formik.errors.firstName}>
-                <FormLabel htmlFor="firstName">Name</FormLabel>
-                <Input
-                  id="firstName"
-                  name="firstName"
-                  {...formik.getFieldProps('firstName')}
-                />
-                <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
-              </FormControl>
-              <FormControl isInvalid={formik.touched.email && !!formik.errors.email}>
-                <FormLabel htmlFor="email">Email Address</FormLabel>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  {...formik.getFieldProps('email')}
-                />
-                <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
-              </FormControl>
-              <FormControl>
-                <FormLabel htmlFor="type">Type of enquiry</FormLabel>
-                <Select id="type" name="type" {...formik.getFieldProps('type')} sx={{
-                  option: {
-                    color: 'black', // Change text color
-                    fontWeight: 'bold', // Optional: bold text
-                    }
-                  }}>
-                  <option value="hireMe">Freelance project proposal</option>
-                  <option value="openSource">
-                    Open source consultancy session
-                  </option>
-                  <option value="other">Other</option>
-                </Select>
-              </FormControl>
-              <FormControl isInvalid={formik.touched.comment && !!formik.errors.comment}>
-                <FormLabel htmlFor="comment">Your message</FormLabel>
-                <Textarea
-                  id="comment"
-                  name="comment"
-                  height={250}
-                  {...formik.getFieldProps('comment')}
-                />
-                <FormErrorMessage>{formik.errors.comment}</FormErrorMessage>
-              </FormControl>
-              <Button type="submit" colorScheme="purple" width="full" disabled={isLoading}>
-                {isLoading ? 'Submitting...' : 'Submit'}
-              </Button>
-            </VStack>
-          </form>
-        </Box>
+      <VStack
+  w={{ base: "90%", sm: "600px", md: "800px", lg: "1024px" }}
+  p={{ base: 6, sm: 10, md: 16, lg: 32 }}
+  alignItems="flex-start"
+  id="contactme-section"
+>
+  <Heading as="h1" fontSize={{ base: "2xl", md: "3xl" }}>
+    Contact me
+  </Heading>
+  <Box p={6} rounded="md" w="100%" bg="transparent">
+    <form onSubmit={formik.handleSubmit}>
+      <VStack spacing={4}>
+        <FormControl isInvalid={formik.touched.firstName && !!formik.errors.firstName}>
+          <FormLabel htmlFor="firstName">Name</FormLabel>
+          <Input id="firstName" name="firstName" {...formik.getFieldProps('firstName')} />
+          <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={formik.touched.email && !!formik.errors.email}>
+          <FormLabel htmlFor="email">Email Address</FormLabel>
+          <Input id="email" name="email" type="email" {...formik.getFieldProps('email')} />
+          <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={formik.touched.type && !!formik.errors.type}>
+          <FormLabel htmlFor="type">Type of enquiry</FormLabel>
+          <Select
+            id="type"
+            name="type"
+            {...formik.getFieldProps('type')}
+            sx={{
+              option: {
+                color: 'black',
+                fontWeight: 'bold',
+              },
+            }}
+            placeholder="Select an option"
+          >
+            <option value="hireMe">Freelance project proposal</option>
+            <option value="openSource">Open source consultancy session</option>
+            <option value="other">Other</option>
+          </Select>
+          <FormErrorMessage>{formik.errors.type}</FormErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={formik.touched.comment && !!formik.errors.comment}>
+          <FormLabel htmlFor="comment">Your message</FormLabel>
+          <Textarea
+            id="comment"
+            name="comment"
+            height={{ base: "180px", md: "250px" }}
+            {...formik.getFieldProps('comment')}
+          />
+          <FormErrorMessage>{formik.errors.comment}</FormErrorMessage>
+        </FormControl>
+        <Button type="submit" colorScheme="teal" width="full" disabled={isLoading}>
+          {isLoading ? "Submitting..." : "Submit"}
+        </Button>
       </VStack>
+    </form>
+  </Box>
+</VStack>
     </FullScreenSection>
   );
 };
