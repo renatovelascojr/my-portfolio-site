@@ -1,39 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import {
-  faFacebook,
-  faGithub,
-  faLinkedin,
-  faMedium,
-  faStackOverflow,
-} from "@fortawesome/free-brands-svg-icons";
-import { Box, HStack, Link as ChakraLink } from "@chakra-ui/react";
+import { Box, HStack, Link as ChakraLink, Flex, Text } from "@chakra-ui/react";
 import { supabase } from "../utils/supabaseClient.ts";
 import { useNavigate, useLocation } from "react-router-dom";
-
-const socials = [
-  {
-    icon: faEnvelope,
-    url: "mailto: renatovelascojr@gmail.com",
-  },
-  {
-    icon: faGithub,
-    url: "https://github.com/renatovelascojr",
-  },
-  {
-    icon: faLinkedin,
-    url: "https://www.linkedin.com/in/renato-velasco-24351723b/",
-  },
-  {
-    icon: faFacebook,
-    url: "https://www.facebook.com/RenatoVelascoJr/",
-  },
-  {
-    icon: faStackOverflow,
-    url: "https://stackoverflow.com",
-  },
-];
 
 const Header = () => {
   const [transform, setTransform] = useState("translateY(0)");
@@ -85,77 +53,74 @@ const Header = () => {
   };
 
   return (
-    <Box
-      position="sticky"
-      top={0}
-      left={0}
-      right={0}
-      transform={{ base: transform }}
-      transition="transform 0.3s ease-in-out"
-      backgroundColor="#18181b"
-      zIndex={1000}
-      width="100%"
+   <Box
+  position="fixed"
+  top={0}
+  left={0}
+  right={0}
+  transform={transform}
+  transition="transform 0.3s ease-in-out"
+  backgroundColor="rgba(36, 36, 42, 0.6)" // dark gray with transparency
+  backdropFilter="blur(16px)"
+  WebkitBackdropFilter="blur(16px)"
+  borderBottom="1px solid rgba(255, 255, 255, 0.08)"
+  zIndex={1000}
+  width="100%"
+  boxShadow="sm"
+>
+  <Box color="gray.200" maxWidth="1280px" margin="0 auto">
+    <Flex
+      px={{ base: 4, md: 16 }}
+      py={{ base: 4, md: 6 }} // more padding for taller nav
+      justify="space-between"
+      align="center"
     >
-      <Box color="white" maxWidth="1280px" margin="0 auto">
-        <HStack
-          px={{ base: 4, md: 16 }}
-          py={{ base: 3, md: 4 }}
-          justifyContent="space-between"
-          alignItems="center"
-          flexWrap="wrap"
-        >
-          <nav>
-            <HStack spacing={{ base: 4, md: 8 }} wrap="wrap">
-              {socials.map((social, index) => (
-                <ChakraLink
-                  key={index}
-                  href={social.url}
-                  isExternal
-                  aria-label={`Link to ${social.url}`}
-                  fontSize={{ base: "lg", md: "2xl" }}
-                >
-                  <FontAwesomeIcon icon={social.icon} />
-                </ChakraLink>
-              ))}
-            </HStack>
-          </nav>
-          <nav>
-            <HStack spacing={{ base: 4, md: 8 }} wrap="wrap" mt={{ base: 2, md: 0 }}>
-              <ChakraLink
-                onClick={handleScrollTo("projects")}
-                cursor="pointer"
-                fontSize={{ base: "sm", md: "md" }}
-              >
-                Projects
-              </ChakraLink>
-              <ChakraLink
-                onClick={handleScrollTo("blogsList")}
-                cursor="pointer"
-                fontSize={{ base: "sm", md: "md" }}
-              >
-                Writing / Blogs
-              </ChakraLink>
-              <ChakraLink
-                onClick={handleScrollTo("contactme")}
-                cursor="pointer"
-                fontSize={{ base: "sm", md: "md" }}
-              >
-                Contact Us
-              </ChakraLink>
-              <ChakraLink
-                onClick={handleLogout}
-                cursor="pointer"
-                color="tomato"
-                fontWeight="bold"
-                fontSize={{ base: "sm", md: "md" }}
-              >
-                Log Out
-              </ChakraLink>
-            </HStack>
-          </nav>
-        </HStack>
-      </Box>
-    </Box>
+      {/* Left: Navigation */}
+      <HStack spacing={{ base: 4, md: 8 }}>
+        {[
+          { label: "Ren", target: "landing" },
+          { label: "What I can do", target: "projects" },
+          { label: "About Me", target: "aboutme" },
+          { label: "Contact Us", target: "contactme" },
+        ].map((item) => (
+          <ChakraLink
+            key={item.target}
+            onClick={handleScrollTo(item.target)}
+            cursor="pointer"
+            fontSize={{ base: "md", md: "lg" }}
+            color="gray.300"
+            fontWeight={item.label === "Ren" ? "bold" : "medium"}
+            _hover={{
+              color: "teal.300",
+              textDecoration: "underline",
+              textUnderlineOffset: "4px",
+            }}
+            transition="color 0.2s ease-in-out"
+          >
+            {item.label}
+          </ChakraLink>
+        ))}
+      </HStack>
+
+      {/* Right: Log Out */}
+      <ChakraLink
+        onClick={handleLogout}
+        cursor="pointer"
+        fontWeight="bold"
+        fontSize={{ base: "md", md: "lg" }}
+        color="red.400"
+        _hover={{
+          color: "red.300",
+          textDecoration: "underline",
+          textUnderlineOffset: "4px",
+        }}
+        transition="color 0.2s ease-in-out"
+      >
+        Log Out
+      </ChakraLink>
+    </Flex>
+  </Box>
+</Box>
   );
 };
 

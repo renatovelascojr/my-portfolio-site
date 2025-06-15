@@ -28,7 +28,7 @@ const ContactMeSection = () => {
       type: '',
       comment: ''
     },
-    onSubmit: (values) => {submit('/api/form', values)},
+    onSubmit: (values) => {submit( null, values)},
     validationSchema: Yup.object({
       firstName: Yup.string()
         .required('First name is required')
@@ -60,7 +60,6 @@ const ContactMeSection = () => {
   return (
     <FullScreenSection
       isDarkBackground
-      background="linear-gradient(to bottom, #EDC9AF, #B66A50)"
       py={16}
       spacing={8}
       
@@ -72,7 +71,7 @@ const ContactMeSection = () => {
   id="contactme-section"
 >
   <Heading as="h1" fontSize={{ base: "2xl", md: "3xl" }}>
-    Contact me
+    Lets connect!
   </Heading>
   <Box p={6} rounded="md" w="100%" bg="transparent">
     <form onSubmit={formik.handleSubmit}>
@@ -121,7 +120,7 @@ const ContactMeSection = () => {
           {isLoading ? "Submitting..." : "Submit"}
         </Button>
       </VStack>
-    </form>
+    </form> 
   </Box>
 </VStack>
     </FullScreenSection>

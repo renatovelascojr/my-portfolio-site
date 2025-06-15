@@ -1,32 +1,88 @@
 import React from "react";
-import { Avatar, Center, Heading, VStack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Text,
+  VStack,
+  HStack,
+  Button,
+  Image,
+} from "@chakra-ui/react";
 import FullScreenSection from "./FullScreenSection";
-import avatarImage from "../images/avatar.jpg";
+import avatarImage from "../images/avatar.jpg"; // Use your updated image path
 
-const greeting = "Hello, I am Ren!";
-const bio1 = "A frontend developer";
-const bio2 = "specialised in React";
-
-const LandingSection = () => (
+const LandingSection = () => {
+  
+const handleScrollTo = (anchor) => () => {
+  const scrollToSection = () => {
+    const id = `${anchor}-section`;
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+  scrollToSection(); // ← You missed this call
+};
+  
+  return (
   <FullScreenSection
-    justifyContent="center"
-    alignItems="center"
     isDarkBackground
-    background="linear-gradient(to bottom, #B66A50, #708238)"
-    py={16}
-    spacing={8}
+    id="landing-section"
+    alignItems="center"
+    justifyContent="center"
   >
-    <VStack spacing={6} align="center" maxW="md" textAlign="center">
-      <Avatar src={avatarImage} size="2xl" />
-      <Heading fontWeight="bold" fontSize={{ base: "xl", md: "2xl" }}>
-        {greeting}
-      </Heading>
-      <VStack spacing={1}>
-        <Heading fontSize={{ base: "2xl", md: "3xl" }}>{bio1}</Heading>
-        <Heading fontSize={{ base: "2xl", md: "3xl" }}>{bio2}</Heading>
+    <HStack spacing={16} px={8} py={16} align="center" flexWrap="wrap">
+      {/* Text Section */}
+      <VStack align="flex-start" spacing={6} maxW="xl">
+        <Heading fontSize={{ base: "3xl", md: "5xl" }} color="white">
+          I am Ren Velasco,
+          <br />
+          A Front-End Developer
+        </Heading>
+        <Button
+          variant="outline"
+          borderColor="whiteAlpha.500"
+          color="whiteAlpha.800"
+          size="lg"
+          cursor="default"
+          _hover={{ bg: "whiteAlpha.200" }}
+        >
+          React | JavaScript | HTML | CSS
+        </Button>
+        <Button
+          colorScheme="whiteAlpha"
+          variant="link"
+          fontSize="lg"
+          mt={4}
+           onClick={handleScrollTo("contactme")}
+        >
+          Work with me today →
+        </Button>
       </VStack>
-    </VStack>
+
+      {/* Oval Image */}
+      <Box
+        boxSize={{ base: "260px", md: "360px" }}
+        borderRadius="full"
+        overflow="hidden"
+        clipPath="ellipse(50% 70% at 50% 50%)"
+        transform="skewX(-12deg)"
+        bg="rgba(255,255,255,0.05)"
+        
+        boxShadow="0 0 30px rgba(255,255,255,0.05)"
+      >
+        <Image
+          src={avatarImage}
+          alt="Ren Velasco"
+          objectFit="cover"
+          width="105%"
+          height="105%"
+          transform="skewX(12deg) scale(1.2)"
+        />
+      </Box>
+    </HStack>
   </FullScreenSection>
-);
+)
+};
 
 export default LandingSection;

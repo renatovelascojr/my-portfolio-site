@@ -16,13 +16,16 @@ import { supabase } from './utils/supabaseClient.ts';
 import { setUser, clearUser } from './store/authSlice.ts';
 import CreateBlog from "./components/CreateBlog.tsx";
 import UpdateBlog from "./components/UpdateBlog.tsx";
-import BlogsList from "./components/ListBlog.tsx";
 import { useState } from "react";
+import AboutMe from "./components/AboutMe.tsx";
+import FirstLandingPage from "./components/FirstLandingPage.tsx";
+import TwoSectionBackground from "./components/backgrounds/TwoSectionsBg.tsx";
+import TwoSectionBackground2 from "./components/backgrounds/TwoSectionsBg2.tsx";
 
 // ProtectedRoute component
 function ProtectedRoute({ children }) {
   const user = useSelector((state) => state.auth.user);
-  return user ? children : <Navigate to="/login" replace />;
+  return user ? children : <Navigate to="/firstlandingpage" replace />;
 }
 
 // PublicRoute component to block logged-in users from auth pages
@@ -44,10 +47,14 @@ function Home({ scrollToBlogs }) {
 
   return (
     <>
+    <TwoSectionBackground>
       <LandingSection />
       <ProjectsSection />
-        <BlogsList />
+    </TwoSectionBackground>
+    <TwoSectionBackground2>
+      <AboutMe />
       <ContactMeSection />
+    </TwoSectionBackground2>
       <Footer />
     </>
   );
@@ -99,7 +106,16 @@ function App() {
 
         <main>
           <Routes>
-            <Route path="/" element={<Navigate to="/register" replace />} />
+            <Route path="/" element={<Navigate to="/firstlandingpage" replace />} />
+
+             <Route
+              path="/firstlandingpage"
+              element={
+                <PublicRoute>
+                  <FirstLandingPage />
+                </PublicRoute>
+              }
+            />
 
             <Route
               path="/register"

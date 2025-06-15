@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient.ts";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   Box,
   Button,
@@ -13,9 +12,12 @@ import {
   VStack,
   Alert,
   AlertIcon,
-  Flex
+  Flex,
 } from "@chakra-ui/react";
+import { motion } from "framer-motion";
+import background from "../images/landingpagebg.jpg";
 
+const MotionBox = motion(Box);
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -35,30 +37,37 @@ const Login = () => {
     if (error) {
       setErrorMsg(error.message);
     } else {
-      navigate("/home"); // redirect to home or dashboard
+      navigate("/home");
     }
   };
 
   return (
     <Flex
       minH="100vh"
+      bgImage={`url(${background})`}
+      bgSize="cover"
+      bgPosition="center"
+      bgRepeat="no-repeat"
       align="center"
-      justify="center"
-      bgGradient="linear(to-br, #0f2027, #203a43, #2c5364)" // dark navy/steel blue gradient
-      px={4}
+      justify="flex-start"
+      px={{ base: 4, md: 24 }}
     >
-      <Box
+      <MotionBox
         maxW="md"
         w="full"
-        bg="#1a202c" // dark gray-blue background for the box
         p={8}
         borderRadius="lg"
-        boxShadow="0 0 15px rgba(0,0,0,0.6)"
-        border="2px solid #2b6cb0" // steel blue border
-      
+        bg="rgba(0, 0, 0, 0.7)"
+        boxShadow="lg"
+        color="white"
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1 }}
       >
-        <VStack spacing={6} as="form" onSubmit={handleLogin} color="white">
-          <Heading size="lg" letterSpacing="wide" color="#63b3ed">
+        <VStack spacing={6} as="form" onSubmit={handleLogin}>
+          <Heading fontSize={{ base: "3xl", md: "4xl" }}
+          fontWeight="semibold"
+          lineHeight="short">
             Log In
           </Heading>
 
@@ -97,7 +106,7 @@ const Login = () => {
             />
           </FormControl>
 
-          <Button type="submit" colorScheme="blue" width="full" size="lg" fontWeight="bold">
+          <Button type="submit" colorScheme="teal" width="full" size="lg" fontWeight="bold">
             Log In
           </Button>
 
@@ -108,7 +117,7 @@ const Login = () => {
             </Link>
           </Text>
         </VStack>
-      </Box>
+      </MotionBox>
     </Flex>
   );
 };
