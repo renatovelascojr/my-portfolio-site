@@ -68,7 +68,7 @@ const handleScrollTo = (anchor) => () => {
         clipPath="ellipse(50% 70% at 50% 50%)"
         transform="skewX(-12deg)"
         bg="rgba(255,255,255,0.05)"
-        
+         mx={{ base: "auto", md: "0" }} 
         boxShadow="0 0 30px rgba(255,255,255,0.05)"
       >
         <Image
