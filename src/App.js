@@ -21,6 +21,7 @@ import AboutMe from "./components/AboutMe.tsx";
 import FirstLandingPage from "./components/FirstLandingPage.tsx";
 import TwoSectionBackground from "./backgrounds/TwoSectionsBg.tsx";
 import TwoSectionBackground2 from "./backgrounds/TwoSectionsBg2.tsx";
+import FourSectionBackground from "./backgrounds/FourSectionsBg.tsx";
 
 
 
@@ -54,14 +55,12 @@ function Home({ scrollToBlogs }) {
   return (
     <>
   
-    <TwoSectionBackground>
+    <FourSectionBackground>
       <LandingSection />
       <ProjectsSection />
-    </TwoSectionBackground>
-    <TwoSectionBackground2>
       <AboutMe />
       <ContactMeSection />
-    </TwoSectionBackground2>
+    </FourSectionBackground>
       <Footer />
     </>
   );
