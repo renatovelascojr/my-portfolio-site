@@ -19,8 +19,14 @@ import UpdateBlog from "./components/UpdateBlog.tsx";
 import { useState } from "react";
 import AboutMe from "./components/AboutMe.tsx";
 import FirstLandingPage from "./components/FirstLandingPage.tsx";
-import TwoSectionBackground from "./components/backgrounds/TwoSectionsBg.tsx";
-import TwoSectionBackground2 from "./components/backgrounds/TwoSectionsBg2.tsx";
+import TwoSectionBackground from "./backgrounds/TwoSectionsBg.tsx";
+import TwoSectionBackground2 from "./backgrounds/TwoSectionsBg2.tsx";
+
+
+
+
+
+
 
 // ProtectedRoute component
 function ProtectedRoute({ children }) {
@@ -47,6 +53,7 @@ function Home({ scrollToBlogs }) {
 
   return (
     <>
+  
     <TwoSectionBackground>
       <LandingSection />
       <ProjectsSection />

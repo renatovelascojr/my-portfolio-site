@@ -1,5 +1,5 @@
 import { Box, VStack } from "@chakra-ui/react";
-import bgImage from "../../images/bg2.jpg"
+import bgImage from "../images/bg2.jpg"
 
 const TwoSectionBackground2 = ({ children }) => {
   return (
