@@ -19,8 +19,6 @@ import UpdateBlog from "./components/UpdateBlog.tsx";
 import { useState } from "react";
 import AboutMe from "./components/AboutMe.tsx";
 import FirstLandingPage from "./components/FirstLandingPage.tsx";
-import TwoSectionBackground from "./backgrounds/TwoSectionsBg.tsx";
-import TwoSectionBackground2 from "./backgrounds/TwoSectionsBg2.tsx";
 import FourSectionBackground from "./backgrounds/FourSectionsBg.tsx";
 
 

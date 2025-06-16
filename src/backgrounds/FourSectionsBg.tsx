@@ -1,43 +1,20 @@
-import React from "react";
 import { Box, VStack } from "@chakra-ui/react";
-import bg1 from "../images/bg1.jpg";
-import bg2 from "../images/bg2.jpg";
+import bgCombined from "../images/mergedbg.png";
 
 const FourSectionBackground = ({ children }) => {
-  const [first, second, third, fourth] = React.Children.toArray(children);
-
   return (
-    <>
-      {/* First two sections with bg1 */}
-      <Box
+    <Box
+        minHeight="400vh"
         width="100vw"
-        minHeight="100vh"
-        backgroundImage={`url(${bg1})`}
-        backgroundSize="cover"
-        backgroundRepeat="no-repeat"
-        backgroundPosition="center"
-      >
-        <VStack spacing={0} align="stretch">
-          {first}
-          {second}
-        </VStack>
-      </Box>
-
-      {/* Last two sections with bg2 */}
-      <Box
-        width="100vw"
-        minHeight="100vh"
-        backgroundImage={`url(${bg2})`}
-        backgroundSize="cover"
-        backgroundRepeat="no-repeat"
-        backgroundPosition="center"
-      >
-        <VStack spacing={0} align="stretch">
-          {third}
-          {fourth}
-        </VStack>
-      </Box>
-    </>
+        backgroundImage={`url(${bgCombined})`}
+        backgroundSize={{ base: "auto 100%", md: "100% 100%" }} // ✅ full width, keep image height proportion
+        backgroundRepeat={{ base: "no-repeat", md: "no-repeat" }}
+        backgroundPosition="top center"
+    >
+      <VStack spacing={0} align="stretch">
+        {children}
+      </VStack>
+    </Box>
   );
 };
 
