@@ -4,10 +4,12 @@ import { supabase } from "../utils/supabaseClient.ts";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IconButton, Collapse, VStack } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
+import { useSelector } from "react-redux";
 
 const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
 
   const handleScrollTo = (anchor) => () => {
   const scrollToSection = () => {
@@ -24,7 +26,7 @@ const handleLogout = async () => {
   try {
     await supabase.auth.signOut();
     localStorage.clear(); // Clear any leftover auth/session data
-    navigate("/login");
+    navigate("/");
   } catch (error) {
     console.error("Logout error:", error.message);
   }
@@ -80,17 +82,31 @@ const handleLogout = async () => {
             {item.label}
           </ChakraLink>
         ))}
-          <ChakraLink
-            onClick={() => {
-              handleLogout();
-              setIsOpen(false);
-            }}
-            color="red.400"
-            fontWeight="bold"
-            _hover={{ color: "red.300" }}
-          >
-            Log Out
-          </ChakraLink>
+          {user ? (
+  <ChakraLink
+    onClick={() => {
+      handleLogout();
+      setIsOpen(false);
+    }}
+    color="red.400"
+    fontWeight="bold"
+    _hover={{ color: "red.300" }}
+  >
+    Log Out
+  </ChakraLink>
+) : (
+  <ChakraLink
+    onClick={() => {
+      navigate("/firstlandingpage");
+      setIsOpen(false);
+    }}
+    color="teal.300"
+    fontWeight="bold"
+    _hover={{ color: "teal.200" }}
+  >
+    Log In
+  </ChakraLink>
+)}
         </VStack>
       </Collapse>
     </>
@@ -102,6 +118,7 @@ const Header = () => {
   const prevScrollY = useRef(window.scrollY);
   const navigate = useNavigate();
   const location = useLocation();
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -135,7 +152,7 @@ const handleLogout = async () => {
   try {
     await supabase.auth.signOut();
     localStorage.clear(); // Clear any leftover auth/session data
-    navigate("/login");
+    navigate("/");
   } catch (error) {
     console.error("Logout error:", error.message);
   }
@@ -205,22 +222,41 @@ const handleLogout = async () => {
       </HStack>
 
       {/* Log Out Desktop */}
-      <ChakraLink
-        onClick={handleLogout}
-        cursor="pointer"
-        display={{ base: "none", md: "inline" }}
-        fontWeight="bold"
-        fontSize="lg"
-        color="red.400"
-        _hover={{
-          color: "red.300",
-          textDecoration: "underline",
-          textUnderlineOffset: "4px",
-        }}
-        transition="color 0.2s ease-in-out"
-      >
-        Log Out
-      </ChakraLink>
+      {user ? (
+  <ChakraLink
+    onClick={handleLogout}
+    cursor="pointer"
+    display={{ base: "none", md: "inline" }}
+    fontWeight="bold"
+    fontSize="lg"
+    color="red.400"
+    _hover={{
+      color: "red.300",
+      textDecoration: "underline",
+      textUnderlineOffset: "4px",
+    }}
+    transition="color 0.2s ease-in-out"
+  >
+    Log Out
+  </ChakraLink>
+) : (
+  <ChakraLink
+    onClick={() => navigate("/firstlandingpage")}
+    cursor="pointer"
+    display={{ base: "none", md: "inline" }}
+    fontWeight="bold"
+    fontSize="lg"
+    color="teal.300"
+    _hover={{
+      color: "teal.200",
+      textDecoration: "underline",
+      textUnderlineOffset: "4px",
+    }}
+    transition="color 0.2s ease-in-out"
+  >
+    Log In
+  </ChakraLink>
+)}
 
       {/* Hamburger Menu Toggle */}
       <Box display={{ base: "block", md: "none" }}>

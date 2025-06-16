@@ -37,7 +37,7 @@ const Login = () => {
     if (error) {
       setErrorMsg(error.message);
     } else {
-      navigate("/home");
+      navigate("/");
     }
   };
 

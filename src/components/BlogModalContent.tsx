@@ -20,6 +20,7 @@ import {
   ModalCloseButton,
   ModalBody,
 } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 
 interface Blog {
   id: number;
@@ -53,18 +54,40 @@ const BlogModalContent = () => {
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
+  const toast = useToast();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const openCreateModal = () => {
-    setEditingBlog(null);
-    onOpen();
-  };
+  if (!userId) {
+    toast({
+      title: "Authentication Required",
+      description: "You must log in first to create a blog.",
+      status: "warning",
+      duration: 3000,
+      isClosable: true,
+    });
+    return;
+  }
 
+  setEditingBlog(null);
+  onOpen();
+};
   const openEditModal = (blog: Blog) => {
-    setEditingBlog(blog);
-    onOpen();
-  };
+  if (!userId) {
+    toast({
+      title: "Authentication Required",
+      description: "You must log in first to edit a blog.",
+      status: "warning",
+      duration: 3000,
+      isClosable: true,
+    });
+    return;
+  }
+
+  setEditingBlog(blog);
+  onOpen();
+};
 
   const fetchUser = async () => {
     const { data: { user }, error } = await supabase.auth.getUser();
@@ -141,7 +164,13 @@ const BlogModalContent = () => {
           <ModalCloseButton />
           <ModalBody paddingBottom="50px" marginTop="-2">
             {editingBlog ? (
-              <UpdateBlog blogId={editingBlog.id.toString()} />
+              <UpdateBlog
+                blogId={editingBlog.id.toString()}
+                onSuccess={() => {
+                  onClose();          // closes modal
+                  fetchBlogs(page);   // refreshes blog list
+                }}
+              />
             ) : (
               <CreateBlog onSuccess={() => { onClose(); fetchBlogs(page); }} onCancel={onClose} />
             )}

@@ -26,7 +26,13 @@ const CreateBlog: React.FC<CreateBlogProps> = ({ onSuccess, onCancel }) => {
     }
 
     if (!session?.user) {
-      alert("You must be logged in to create a blog.");
+      toast({
+        title: "Error",
+        description: "You must be logged in first",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
       return;
     }
 

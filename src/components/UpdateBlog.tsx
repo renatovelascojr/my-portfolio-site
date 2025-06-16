@@ -23,9 +23,10 @@ interface BlogData {
 
 interface UpdateBlogProps {
   blogId: string;  // or number, whatever type your blog ID is
+  onSuccess: () => void;
 }
 
-const UpdateBlog = ({ blogId }: UpdateBlogProps) => {
+const UpdateBlog = ({ blogId, onSuccess  }: UpdateBlogProps) => {
     console.log("Received blogId prop:", blogId)
     console.log("Exact blogId string:", JSON.stringify(blogId));
     console.log("Type of blogId:", typeof blogId);
@@ -131,7 +132,7 @@ console.log("blogId:", blogId, typeof blogId);
       duration: 3000,
       isClosable: true,
     });
-    navigate("/");
+    onSuccess();
   }
 };
 
@@ -156,7 +157,7 @@ console.log("blogId:", blogId, typeof blogId);
         duration: 3000,
         isClosable: true,
       });
-      navigate("/");
+       onSuccess();
     }
   };
 

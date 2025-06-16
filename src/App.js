@@ -27,6 +27,7 @@ import FourSectionBackground from "./backgrounds/FourSectionsBg.tsx";
 
 
 
+
 // ProtectedRoute component
 function ProtectedRoute({ children }) {
   const user = useSelector((state) => state.auth.user);
@@ -98,7 +99,7 @@ function App() {
   return <div>Loading... (Check console for logs)</div>;
 }
 
-  const noHeaderRoutes = ["/login", "/register"];
+  const noHeaderRoutes = ["/login", "/register", "/firstlandingpage"];
 
   return (
     <ChakraProvider>
@@ -106,11 +107,12 @@ function App() {
         {/* NO Router HERE */}
         
         {/* Conditionally show Header */}
-        {!noHeaderRoutes.includes(location.pathname) && user && <Header />}
+        {!noHeaderRoutes.includes(location.pathname) && <Header />}
 
         <main>
           <Routes>
-            <Route path="/" element={<Navigate to="/firstlandingpage" replace />} />
+            <Route path="/" element={<Home />} />
+
 
              <Route
               path="/firstlandingpage"
@@ -140,9 +142,9 @@ function App() {
             <Route
               path="/home"
               element={
-                <ProtectedRoute>
+                <PublicRoute>
                   <Home />
-                </ProtectedRoute>
+                </PublicRoute>
               }
             />
 
