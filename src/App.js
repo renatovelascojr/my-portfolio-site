@@ -35,10 +35,10 @@ function ProtectedRoute({ children }) {
 }
 
 // PublicRoute component to block logged-in users from auth pages
-function PublicRoute({ children }) {
+/*function PublicRoute({ children }) {
   const user = useSelector((state) => state.auth.user);
   return user ? <Navigate to="/home" replace /> : children;
-}
+}*/
 
 // Home component
 function Home({ scrollToBlogs }) {
@@ -117,34 +117,34 @@ function App() {
              <Route
               path="/firstlandingpage"
               element={
-                <PublicRoute>
+                
                   <FirstLandingPage />
-                </PublicRoute>
+                
               }
             />
 
             <Route
               path="/register"
               element={
-                <PublicRoute>
+                
                   <Register />
-                </PublicRoute>
+                
               }
             />
             <Route
               path="/login"
               element={
-                <PublicRoute>
+                
                   <Login />
-                </PublicRoute>
+                
               }
             />
             <Route
               path="/home"
               element={
-                <PublicRoute>
+                
                   <Home />
-                </PublicRoute>
+                
               }
             />
 
